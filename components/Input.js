@@ -1,8 +1,11 @@
-import { View, TextInput } from 'react-native'
+import { View, TextInput, Button} from 'react-native'
 import React, { useState } from 'react'
 
 export default function Input({ textUpdateFunction }) {
-  const [text, setText] = useState();
+  const [text, setText] = useState("initial Val");
+  function updateText() {
+    textUpdateFunciton(text);
+  }
   return (
     <View>
       <TextInput 
@@ -13,6 +16,10 @@ export default function Input({ textUpdateFunction }) {
         } }
         style={{ backgroundColor: "red"}}
       /> 
+      <Button title="Confirm" onPress={() => { 
+        textUpdateFunction(text);
+        setText("");
+      }} />
     </View>
   )
 }
