@@ -1,42 +1,63 @@
-import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { useState } from "react";
+import { Button, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import Header from "./components/Header";
 import Input from "./components/Input";
 
-export default function App() {
-  const name = "My Awesome App";
-  const [enteredText, setEnteredText] = useState("");
+export default App = () => {
+  const name = "CS 5520"; //js variable
+  const [enteredText, setEnteredText] = useState("Your goals appear here");
   const [modalVisible, setModalVisible] = useState(false);
-  function onTextEnter (changedText) {
+  // this function is called on Confirm
+  function onTextEnter(changedText) {
     setEnteredText(changedText);
+    setModalVisible(false);
   }
-
-  function cancelModal () {
+  function onCancel() {
     setModalVisible(false);
   }
 
   return (
-    <View style={styles.container}>
-      <Header name={name}/> 
-      <Button title="Add task" onPress = {() => setModalVisible(true)} />     
+    <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
-      <Input 
-      textUpdateFunction={onTextEnter}
-      setModalVisible={setModalVisible} 
-      modalVisible={modalVisible} 
-      cancelModal={cancelModal}
+
+      <View style={styles.topContainer}>
+        <Header appName={name} />
+        <Button title="Add task" onPress={() => setModalVisible(true)} />
+      </View>
+
+      <Input
+        modalIsVisible={modalVisible}
+        textUpdateFunction={onTextEnter}
+        onCancel={onCancel}
+        // containerStyle={styles.container}
       />
-      <Text>{enteredText}</Text>
-    </View>
+      <View style={styles.bottomContainer}>
+        <Text style={styles.text}>{enteredText}</Text>
+      </View>
+    </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
+    // backgroundColor: "red",
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "stretch",
+    justifyContent: "center",
+  },
+  topContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  bottomContainer: {
+    flex: 4,
+    backgroundColor: "#dcd",
+  },
+  text: {
+    color: "#4510ff",
+    fontSize: 18,
   },
 });
