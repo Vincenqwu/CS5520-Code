@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { Button, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Button, SafeAreaView, StyleSheet, Text, View, ScrollView } from "react-native";
 import Header from "./components/Header";
 import Input from "./components/Input";
 
@@ -8,8 +8,15 @@ export default App = () => {
   const name = "CS 5520"; //js variable
   const [enteredText, setEnteredText] = useState("Your goals appear here");
   const [modalVisible, setModalVisible] = useState(false);
+  const [goals, setGoals] = new useState([])
   // this function is called on Confirm
   function onTextEnter(changedText) {
+    let newGoal = { text : changedText, id: Math.random() };
+    console.log(newGoal);
+    // setGoals([...goals, newGoal.text + Math.random()]);
+
+    // make sure always get the latest state (array)
+    setGoals((prevGoal) => [...prevGoal, newGoal]);
     setEnteredText(changedText);
     setModalVisible(false);
   }
@@ -33,7 +40,11 @@ export default App = () => {
         // containerStyle={styles.container}
       />
       <View style={styles.bottomContainer}>
-        <Text style={styles.text}>{enteredText}</Text>
+        <ScrollView >
+          {goals.map((goal) => {
+            return <Text key={goal.id} style={styles.text}>{goal.text}</Text>
+          })}
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
@@ -55,9 +66,12 @@ const styles = StyleSheet.create({
   bottomContainer: {
     flex: 4,
     backgroundColor: "#dcd",
+    alignItems: "center",
+    justifyContent: "center"
   },
   text: {
     color: "#4510ff",
-    fontSize: 18,
+    fontSize: 40,
+    margin: 30,
   },
 });
