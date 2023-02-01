@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { Button, SafeAreaView, StyleSheet, Text, View, ScrollView } from "react-native";
+import { Button, SafeAreaView, StyleSheet, Text, View, ScrollView, FlatList } from "react-native";
 import Header from "./components/Header";
 import Input from "./components/Input";
 
@@ -11,7 +11,7 @@ export default App = () => {
   const [goals, setGoals] = new useState([])
   // this function is called on Confirm
   function onTextEnter(changedText) {
-    let newGoal = { text : changedText, id: Math.random() };
+    let newGoal = { text: changedText, id: Math.random() };
     console.log(newGoal);
     // setGoals([...goals, newGoal.text + Math.random()]);
 
@@ -37,14 +37,22 @@ export default App = () => {
         modalIsVisible={modalVisible}
         textUpdateFunction={onTextEnter}
         onCancel={onCancel}
-        // containerStyle={styles.container}
+      // containerStyle={styles.container}
       />
       <View style={styles.bottomContainer}>
-        <ScrollView >
+        {/* <ScrollView >
           {goals.map((goal) => {
             return <Text key={goal.id} style={styles.text}>{goal.text}</Text>
           })}
-        </ScrollView>
+        </ScrollView> */}
+        <FlatList
+          data={goals}
+          renderItem={({ item }) => {
+            return <Text style={styles.text}> {item.text} </Text>
+          }
+          }
+        />
+
       </View>
     </SafeAreaView>
   );
