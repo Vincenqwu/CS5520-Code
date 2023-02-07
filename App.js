@@ -1,27 +1,50 @@
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { Button, SafeAreaView, StyleSheet, Text, View, ScrollView, FlatList } from "react-native";
+import {
+  Button,
+  FlatList,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import GoalItem from "./components/GoalItem";
 import Header from "./components/Header";
 import Input from "./components/Input";
 
 export default App = () => {
   const name = "CS 5520"; //js variable
-  const [enteredText, setEnteredText] = useState("Your goals appear here");
+  // const [enteredText, setEnteredText] = useState("Your goals appear here");
+  const [goals, setGoals] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [goals, setGoals] = new useState([])
   // this function is called on Confirm
   function onTextEnter(changedText) {
     let newGoal = { text: changedText, id: Math.random() };
     console.log(newGoal);
-    // setGoals([...goals, newGoal.text + Math.random()]);
+    // update this function to save the text in our goals array
+    // as an object {text: changeText, id:...}
 
-    // make sure always get the latest state (array)
-    setGoals((prevGoal) => [...prevGoal, newGoal]);
-    setEnteredText(changedText);
+    setGoals((prevGoals) => {
+      return [...prevGoals, newGoal];
+    });
+
+    // setEnteredText(changedText);
     setModalVisible(false);
   }
   function onCancel() {
     setModalVisible(false);
+  }
+  function onDeletePressed(deletedId) {
+    // console.log("delete pressed ", deletedId);
+    // let newGoals = goals.filter((goal) => {
+    //   goal.id !== deletedId;
+    // });
+    setGoals((prevGoals) => {
+      return prevGoals.filter((goal) => {
+        return goal.id !== deletedId;
+      });
+    });
   }
 
   return (
@@ -37,22 +60,26 @@ export default App = () => {
         modalIsVisible={modalVisible}
         textUpdateFunction={onTextEnter}
         onCancel={onCancel}
-      // containerStyle={styles.container}
+        // containerStyle={styles.container}
       />
       <View style={styles.bottomContainer}>
-        {/* <ScrollView >
-          {goals.map((goal) => {
-            return <Text key={goal.id} style={styles.text}>{goal.text}</Text>
-          })}
-        </ScrollView> */}
         <FlatList
+          contentContainerStyle={styles.scrollViewContentContainer}
           data={goals}
           renderItem={({ item }) => {
-            return <Text style={styles.text}> {item.text} </Text>
-          }
-          }
+            // console.log(item);
+            return <GoalItem goal={item} onDelete={onDeletePressed} />;
+          }}
         />
-
+        {/* <ScrollView contentContainerStyle={styles.scrollViewContentContainer}> */}
+        {/* {goals.map((goal) => {
+          return (
+            <View key={goal.id} style={styles.textContainer}>
+              <Text style={styles.text}>{goal.text}</Text>
+            </View>
+          );
+        })} */}
+        {/* </ScrollView> */}
       </View>
     </SafeAreaView>
   );
@@ -74,12 +101,18 @@ const styles = StyleSheet.create({
   bottomContainer: {
     flex: 4,
     backgroundColor: "#dcd",
+  },
+  scrollViewContentContainer: {
     alignItems: "center",
-    justifyContent: "center"
+  },
+  textContainer: {
+    borderRadius: 5,
+    backgroundColor: "#888",
+    marginVertical: 15,
+    padding: 15,
   },
   text: {
     color: "#4510ff",
-    fontSize: 40,
-    margin: 30,
+    fontSize: 30,
   },
 });

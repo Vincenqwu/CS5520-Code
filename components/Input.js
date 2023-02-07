@@ -38,8 +38,8 @@ export default function Input({
         <View style={styles.buttonContainer}>
           <View style={styles.button}>
             <Button
+              disabled={text.length === 0 ? true : false}
               title="Confirm"
-              disabled={text.length===0 ? true : false}
               onPress={() => {
                 textUpdateFunction(text);
                 setText("");
