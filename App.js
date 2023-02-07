@@ -47,6 +47,9 @@ export default App = () => {
     });
   }
 
+  function goalItemPressed(id) {
+    console.log("Goal item pressed " + id);
+  }
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
@@ -68,7 +71,7 @@ export default App = () => {
           data={goals}
           renderItem={({ item }) => {
             // console.log(item);
-            return <GoalItem goal={item} onDelete={onDeletePressed} />;
+            return <GoalItem goal={item} onDelete={onDeletePressed} onGoalPressed={goalItemPressed}/>;
           }}
         />
         {/* <ScrollView contentContainerStyle={styles.scrollViewContentContainer}> */}
