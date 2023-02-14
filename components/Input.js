@@ -8,6 +8,7 @@ import {
   Image,
 } from "react-native";
 import { useState } from "react";
+import PressableButton from "./PressableButton";
 
 export default function Input({
   textUpdateFunction,
@@ -46,9 +47,15 @@ export default function Input({
               }}
             />
           </View>
-          <View style={styles.button}>
+          {/* <View style={styles.button}>
             <Button title="Cancel" onPress={onCancel} />
-          </View>
+          </View> */}
+          <PressableButton
+            pressHandler={onCancel}
+            style={{ backgroundColor: "lightgreen" }}
+          >
+            <Text>Cancel</Text>
+          </PressableButton>
         </View>
       </View>
     </Modal>

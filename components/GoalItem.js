@@ -1,23 +1,39 @@
 import { View, Text, StyleSheet, Button, Pressable } from "react-native";
 import React from "react";
+import PressableButton from "./PressableButton";
+import { FontAwesome } from "@expo/vector-icons";
 
-export default function GoalItem({ goal, onDelete, onGoalPressed }) {
+export default function GoalItem({ goal, onDelete, onGoalPress }) {
+  function deleteHandler() {
+    onDelete(goal.id);
+  }
   return (
-    
-      <View style={styles.textContainer}>
-        <Pressable onPress={() => onGoalPressed(goal.id)}
-    android_ripple={{color: 'red', borderless: false,foreground: true}}>
+    <View>
+      <Pressable
+        style={({ pressed }) => {
+          // console.log("data from style ", data);
+          return [styles.textContainer, pressed ? styles.pressedStyle : null];
+        }}
+        // android_ripple={{ color: "red" }}
+        onPress={() => onGoalPress(goal.id)}
+      >
         <Text style={styles.text}>{goal.text}</Text>
-        <Button
+        {/* <Button
           color="black"
           title="X"
           onPress={() => {
             onDelete(goal.id);
           }}
-        />
-            </Pressable>
-
-      </View>
+        /> */}
+        <PressableButton
+          style={{ backgroundColor: "yellow" }}
+          title="X"
+          pressHandler={deleteHandler}
+        >
+          <FontAwesome name="trash-o" size={24} color="black" />
+        </PressableButton>
+      </Pressable>
+    </View>
   );
 }
 
@@ -35,4 +51,5 @@ const styles = StyleSheet.create({
     fontSize: 30,
     marginRight: 8,
   },
+  pressedStyle: { backgroundColor: "#e9e", opacity: 0.5 },
 });
