@@ -7,6 +7,7 @@ export default function GoalItem({ goal, onDelete, onGoalPress }) {
   function deleteHandler() {
     onDelete(goal.id);
   }
+
   return (
     <View>
       <Pressable
@@ -15,14 +16,14 @@ export default function GoalItem({ goal, onDelete, onGoalPress }) {
           return [styles.textContainer, pressed ? styles.pressedStyle : null];
         }}
         // android_ripple={{ color: "red" }}
-        onPress={() => onGoalPress(goal.id)}
+        onPress={() => onGoalPress(goal)}
       >
         <Text style={styles.text}>{goal.text}</Text>
         {/* <Button
           color="black"
-          title="X"
+          title="Help"
           onPress={() => {
-            onDelete(goal.id);
+            testNavigation();
           }}
         /> */}
         <PressableButton

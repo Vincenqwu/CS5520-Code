@@ -1,121 +1,68 @@
-import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
-import {
-  Button,
-  FlatList,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import GoalItem from "./components/GoalItem";
-import Header from "./components/Header";
-import Input from "./components/Input";
+import { View, Text } from "react-native";
+import React from "react";
+import Home from "./Home";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import GoalDetails from "./components/GoalDetails";
+import Help from "./components/Help";
+import { FontAwesome } from "@expo/vector-icons";
+import PressableButton from "./components/PressableButton";
 
-export default App = () => {
-  const name = "CS 5520"; //js variable
-  // const [enteredText, setEnteredText] = useState("Your goals appear here");
-  const [goals, setGoals] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
-  // this function is called on Confirm
-  function onTextEnter(changedText) {
-    let newGoal = { text: changedText, id: Math.random() };
-    console.log(newGoal);
-    // update this function to save the text in our goals array
-    // as an object {text: changeText, id:...}
-
-    setGoals((prevGoals) => {
-      return [...prevGoals, newGoal];
-    });
-
-    // setEnteredText(changedText);
-    setModalVisible(false);
-  }
-  function onCancel() {
-    setModalVisible(false);
-  }
-  function onDeletePressed(deletedId) {
-    // console.log("delete pressed ", deletedId);
-    // let newGoals = goals.filter((goal) => {
-    //   goal.id !== deletedId;
-    // });
-    setGoals((prevGoals) => {
-      return prevGoals.filter((goal) => {
-        return goal.id !== deletedId;
-      });
-    });
-  }
-
-  function goalItemPressed(id) {
-    console.log("Goal item pressed " + id);
-  }
+const Stack = createNativeStackNavigator();
+// console.log(Stack);
+export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar style="auto" />
-
-      <View style={styles.topContainer}>
-        <Header appName={name} />
-        <Button title="Add task" onPress={() => setModalVisible(true)} />
-      </View>
-
-      <Input
-        modalIsVisible={modalVisible}
-        textUpdateFunction={onTextEnter}
-        onCancel={onCancel}
-        // containerStyle={styles.container}
-      />
-      <View style={styles.bottomContainer}>
-        <FlatList
-          contentContainerStyle={styles.scrollViewContentContainer}
-          data={goals}
-          renderItem={({ item }) => {
-            // console.log(item);
-            return <GoalItem goal={item} onDelete={onDeletePressed} onGoalPressed={goalItemPressed}/>;
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: "purple",
+          },
+          headerTintColor: "#eee",
+          headerTitleStyle: {
+            fontSize: 20,
+          },
+        }}
+      >
+        <Stack.Screen
+          options={{
+            title: "All My Goals",
           }}
+          name="Home"
+          component={Home}
         />
-        {/* <ScrollView contentContainerStyle={styles.scrollViewContentContainer}> */}
-        {/* {goals.map((goal) => {
-          return (
-            <View key={goal.id} style={styles.textContainer}>
-              <Text style={styles.text}>{goal.text}</Text>
-            </View>
-          );
-        })} */}
-        {/* </ScrollView> */}
-      </View>
-    </SafeAreaView>
-  );
-};
+        <Stack.Screen
+          // the function in options will recieve route and navigation automatically
+          // options={({ route }) => {
+          //   // console.log(data);
+          //   return {
+          //     // make the title dynamically set using route.params
 
-const styles = StyleSheet.create({
-  container: {
-    // backgroundColor: "red",
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "stretch",
-    justifyContent: "center",
-  },
-  topContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  bottomContainer: {
-    flex: 4,
-    backgroundColor: "#dcd",
-  },
-  scrollViewContentContainer: {
-    alignItems: "center",
-  },
-  textContainer: {
-    borderRadius: 5,
-    backgroundColor: "#888",
-    marginVertical: 15,
-    padding: 15,
-  },
-  text: {
-    color: "#4510ff",
-    fontSize: 30,
-  },
-});
+          //     title: route.params.goalItem.text,
+          //     headerRight: () => {
+          //       // return <Text>testing </Text>;
+          //       // return a pressable button with an icon
+          //       return (
+          //         // <PressableButton
+          //         //   style={{ backgroundColor: "purple" }}
+          //         //   pressHandler={iconPressed}
+          //         // >
+          //         <FontAwesome
+          //           name="warning"
+          //           size={24}
+          //           color="#eee"
+          //           onPress={iconPressed}
+          //         />
+          //         // </PressableButton>
+          //       );
+          //     },
+          //   };
+          // }}
+          name="GoalDetails"
+          component={GoalDetails}
+        />
+        <Stack.Screen name="Help" component={Help} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
