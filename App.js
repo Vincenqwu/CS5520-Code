@@ -26,7 +26,7 @@ export default function App() {
       >
         <Stack.Screen
           options={{
-            title: "All My Goals",
+            title: "All Goals",
           }}
           name="Home"
           component={Home}

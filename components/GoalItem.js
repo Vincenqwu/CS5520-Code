@@ -6,6 +6,7 @@ import { FontAwesome } from "@expo/vector-icons";
 export default function GoalItem({ goal, onDelete, onGoalPress }) {
   function deleteHandler() {
     onDelete(goal.id);
+    console.log(goal.id);
   }
 
   return (
