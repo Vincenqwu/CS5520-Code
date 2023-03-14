@@ -29,7 +29,7 @@ export default Home = ({ navigation }) => {
           // we want to update goals array with the data THAT we get in this array
           querySnapshot.docs.forEach((snap) => {
             console.log(snap.id);
-            return docs.push({ ...snap.data(), id: snap.id });
+            docs.push({ ...snap.data(), id: snap.id });
           });
           console.log(docs);
           setGoals(docs);

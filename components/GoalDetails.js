@@ -1,6 +1,7 @@
 import { View, Text, Button } from "react-native";
 import React, { useEffect, useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
+import GoalUsers from "./GoalUsers";
 
 export default function GoalDetails({ route, navigation }) {
   function iconPressed() {
@@ -29,6 +30,7 @@ export default function GoalDetails({ route, navigation }) {
         You are viewing details of {route.params.goalItem.text} with id:{" "}
         {route.params.goalItem.id}
       </Text>
+      <GoalUsers />
       {/* <Button
         title="more details"
         onPress={() => {
