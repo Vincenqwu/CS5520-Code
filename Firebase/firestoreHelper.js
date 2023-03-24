@@ -1,9 +1,13 @@
 import { collection, addDoc, doc, deleteDoc } from "firebase/firestore";
 import { firestore } from "./firebase-setup";
+import { auth } from "./firebase-setup";
 
 export async function writeToDB(goal) {
   try {
-    const docRef = await addDoc(collection(firestore, "goals"), goal);
+    const docRef = await addDoc(collection(firestore, "goals"), {
+      ...goal,
+      user: auth.currentUser.uid,
+    });
     console.log(docRef.id);
   } catch (err) {
     console.log(err);

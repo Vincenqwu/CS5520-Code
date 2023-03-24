@@ -1,59 +1,62 @@
-import { View, Text, TextInput, Button, Alert } from 'react-native'
-import { useState } from 'react'
-import React from 'react'
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import { async } from '@firebase/util';
+import { View, Text, TextInput, Button, Alert } from "react-native";
+import React, { useState } from "react";
+import { auth } from "../Firebase/firebase-setup";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function Signup({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const auth = getAuth();
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [confirmPassword, setConfirmPassword] = useState(null);
 
-  async function signupHandler() {
-    console.log(password + " " + confirmPassword)
+  const loginHandler = () => {
+    navigation.replace("Login");
+  };
+
+  const signupHandler = async () => {
     if (password !== confirmPassword) {
-      Alert.alert('Passwords do not match');
+      Alert.alert("The passwords don't match");
     }
     try {
-      const user = await createUserWithEmailAndPassword (auth, email, password);
-
+      const userCred = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      // console.log(userCred);
+    } catch (err) {
+      console.log("Auth error ", err);
     }
-    catch (error) {
-      Alert.alert(error.message);
-    }
-    console.log('signup')
-  }
-
-  function loginHandler() {
-    navigation.replace('Login');
-  }
-  
+  };
   return (
     <View>
       <Text>Email</Text>
-      <TextInput value={email} onChangeText={(newEmail) => {
-        setEmail(newEmail);
-      }}
-        placeholder="Email" />  
+      <TextInput
+        value={email}
+        onChangeText={(newEmail) => {
+          setEmail(newEmail);
+        }}
+        placeholder="Email"
+      />
       <Text>Password</Text>
-      <TextInput value={password} onChangeText={(newPassword) => {
-        setPassword(newPassword)
-      }}
+      <TextInput
+        value={password}
+        onChangeText={(newPassword) => {
+          setPassword(newPassword);
+        }}
         placeholder="Password"
         secureTextEntry={true}
       />
       <Text>Confirm Password</Text>
-      <TextInput value={confirmPassword} onChangeText={(newPassword) => {
-        console.log(newPassword)
-        setConfirmPassword(newPassword)
-      }}
-        placeholder="Confirm Password"
+      <TextInput
+        value={confirmPassword}
+        onChangeText={(newPassword) => {
+          setConfirmPassword(newPassword);
+        }}
+        placeholder=" Confrim Password"
         secureTextEntry={true}
       />
       <Button title="Register" onPress={signupHandler} />
-      <Button title="Already have an account? Login" onPress={loginHandler} />
-      
+      <Button title="Already Registered? Login" onPress={loginHandler} />
     </View>
-  )
+  );
 }

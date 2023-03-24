@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useState } from "react";
 import PressableButton from "./PressableButton";
+import ImageManager from "./ImageManager";
 
 export default function Input({
   textUpdateFunction,
@@ -16,9 +17,12 @@ export default function Input({
   onCancel,
 }) {
   const [text, setText] = useState("");
-  function updateText() {
-    textUpdateFunction(text);
-  }
+  const [imageUri, setImageUri] = useState("");
+
+  const imageUriHandler = (uri) => {
+    setImageUri(uri);
+  };
+
   return (
     <Modal visible={modalIsVisible} animationType="slide">
       <View style={styles.container}>
@@ -36,13 +40,15 @@ export default function Input({
             setText(changedText);
           }}
         />
+        <ImageManager imageUriHandler={imageUriHandler} />
+
         <View style={styles.buttonContainer}>
           <View style={styles.button}>
             <Button
               disabled={text.length === 0 ? true : false}
               title="Confirm"
               onPress={() => {
-                textUpdateFunction(text);
+                textUpdateFunction({ text, imageUri });
                 setText("");
               }}
             />

@@ -1,6 +1,9 @@
 import { StatusBar } from "expo-status-bar";
-import { onSnapshot, collection } from "firebase/firestore";
+import { onSnapshot, collection, query, where } from "firebase/firestore";
 import { useState, useEffect } from "react";
+import { ref, uploadBytesResumable } from "firebase/storage";
+import { storage } from "./Firebase/firebase-setup";
+
 import {
   Button,
   FlatList,
@@ -14,12 +17,15 @@ import GoalItem from "./components/GoalItem";
 import Header from "./components/Header";
 import Input from "./components/Input";
 import { deleteFromDB, writeToDB } from "./Firebase/firestoreHelper";
-import { firestore } from "./Firebase/firebase-setup";
+import { auth, firestore } from "./Firebase/firebase-setup";
 
 export default Home = ({ navigation }) => {
   useEffect(() => {
     const unsubscribe = onSnapshot(
-      collection(firestore, "goals"),
+      query(
+        collection(firestore, "goals"),
+        where("user", "==", auth.currentUser.uid)
+      ),
       (querySnapshot) => {
         if (querySnapshot.empty) {
           // no data
@@ -34,6 +40,9 @@ export default Home = ({ navigation }) => {
           console.log(docs);
           setGoals(docs);
         }
+      },
+      (error) => {
+        console.log("onsnapshot error: ", error);
       }
     );
     return () => {
@@ -47,8 +56,22 @@ export default Home = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   // this function is called on Confirm
   // call writeToDB in this function
-  function onTextEnter(changedText) {
-    let newGoal = { text: changedText }; //, id: Math.random() };
+  async function fetchImageData(uri) {
+    console.log(uri); //local uri on the device
+    const response = await fetch(uri);
+    const imageBlob = await response.blob(); //image data
+    const imageName = uri.substring(uri.lastIndexOf("/") + 1);
+    const imageRef = await ref(storage, `images/${imageName}`);
+    const uploadResult = await uploadBytesResumable(imageRef, imageBlob);
+    return uploadResult.metadata.fullPath; //path to the image on the storage
+  }
+  async function onTextEnter(dataFromInput) {
+    // dataFromInput is in this form {text:.., imageUri:..}
+    let imageUri;
+    if (dataFromInput.imageUri) {
+      imageUri = await fetchImageData(dataFromInput.imageUri);
+    }
+    let newGoal = { text: dataFromInput.text, imageUri: imageUri }; //, id: Math.random() };
     console.log(newGoal);
     // update this function to save the text in our goals array
     // as an object {text: changeText, id:...}

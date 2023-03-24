@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Dimensions,
   useWindowDimensions,
+  Platform,
 } from "react-native";
 import React from "react";
 
@@ -35,7 +36,12 @@ const styles = StyleSheet.create({
   header: {
     color: "purple",
     borderColor: "rebeccapurple",
-    borderWidth: 2,
+    borderWidth: Platform.OS === "ios" ? 2 : 6,
+    // borderWidth: Platform.select({
+    //   android: 4,
+    //   ios: 2,
+    //   default: 0,
+    // }),
     padding: 5,
     fontSize: windowWidth > 380 ? 24 : 16,
     width: 350,
