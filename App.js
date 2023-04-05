@@ -15,6 +15,7 @@ import Profile from "./components/Profile";
 const Stack = createNativeStackNavigator();
 // console.log(Stack);
 import { Ionicons } from "@expo/vector-icons";
+import Map from "./components/Map";
 
 const AuthStack = (
   <>
@@ -92,6 +93,7 @@ const AppStack = (
         },
       }}
     />
+    <Stack.Screen name="Map" component={Map} />
   </>
 );
 export default function App() {

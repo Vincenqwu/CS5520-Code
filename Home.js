@@ -67,11 +67,12 @@ export default Home = ({ navigation }) => {
   }
   async function onTextEnter(dataFromInput) {
     // dataFromInput is in this form {text:.., imageUri:..}
+    let newGoal = { text: dataFromInput.text };
     let imageUri;
     if (dataFromInput.imageUri) {
       imageUri = await fetchImageData(dataFromInput.imageUri);
+      newGoal = { ...newGoal, imageUri: imageUri }; //, id: Math.random() };
     }
-    let newGoal = { text: dataFromInput.text, imageUri: imageUri }; //, id: Math.random() };
     console.log(newGoal);
     // update this function to save the text in our goals array
     // as an object {text: changeText, id:...}
